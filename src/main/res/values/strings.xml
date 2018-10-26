@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SEG2505</string>
+    <string name="field_username">Username</string>
+    <string name="field_create">Create Account</string>
+    <string name="field_login">Login</string>
+    <string name="welcome_name">Welcome, %1$s</string>
+</resources>
