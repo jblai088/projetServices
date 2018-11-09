@@ -9,30 +9,26 @@ public class Database {
         return singleton;
     }
 
-    private HashMap<String,AccountBase> map;
-    private boolean hasAdmin = false;
-
-    public Database() {
-        map = new HashMap<String,AccountBase>();
-    }
+    private Dataset<AccountBase> accountMap;
+    private Dataset<Service> serviceMap;
 
     public AccountBase getAccount(String name) {
-        return map.get(name);
+        return accountMap.get(name);
+    }
+    public Service getService(String name) { return serviceMap.get(name); }
+
+    public AccountBase createAccount(String username, String password, AccountBase.Type type) throws IllegalArgumentException {
+        AccountBase account = new AccountBase(username,password,type);
+        if (!accountMap.create(username,account))
+            throw new IllegalArgumentException("Account already exists.");
+        return account;
     }
 
-    public AccountBase createAccount(String username, String password, AccountBase.Type type) {
-        if (map.containsKey(username))
-            return null;
-        else {
-            if (type == AccountBase.Type.admin) {
-                if (hasAdmin)
-                    return null;
-                hasAdmin = true;
-            }
-            AccountBase account = new AccountBase(username,password,type);
-            map.put(username,account);
-            return account;
-        }
+    public Service createService(String name, int hourRate) throws IllegalArgumentException {
+        Service service = new Service(name,hourRate);
+        if (!serviceMap.create(name,service))
+            throw new IllegalArgumentException("Service already exists.");
+        return service;
     }
 
 }

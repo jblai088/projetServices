@@ -9,7 +9,9 @@ public class AccountBase {
     private String password;
     private Type type;
 
-    public AccountBase(String username, String password, Type type) {
+    public AccountBase(String username, String password, Type type) throws IllegalArgumentException {
+        if (username.isEmpty()) throw new IllegalArgumentException("Empty username");
+        if (password.isEmpty()) throw new IllegalArgumentException("Empty password");
         this.username = username;
         this.password = password;
         this.type = type;

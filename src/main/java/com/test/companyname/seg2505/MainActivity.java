@@ -37,21 +37,25 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateConfirm(View view) {
         String username = findViewById(R.id.createUsername).toString();
         String password = findViewById(R.id.createPassword).toString();
-        AccountBase.Type type = getTypeFromRadio();
-        if (password.equals(findViewById(R.id.createPassword2).toString())) {
-            AccountBase account = Database.getDatabase().createAccount(username,password,type);
-            if (account != null)
+        try {
+            if (password.equals(findViewById(R.id.createPassword2).toString())) {
+                AccountBase.Type type = getAccountType(username);
+                AccountBase account = Database.getDatabase().createAccount(username, password, type);
                 homepage(account);
+            } else throw new IllegalArgumentException("Password mismatch");
+        } catch (IllegalArgumentException e) {
+            //Message d'erreur
         }
     }
 
-    private AccountBase.Type getTypeFromRadio() {
+    private AccountBase.Type getAccountType(String username) throws IllegalArgumentException {
+        if (username.equals("admin")) return AccountBase.Type.admin;
         RadioButton fourButton = findViewById(R.id.radioButtonFour);
         RadioButton propButton = findViewById(R.id.radioButtonProp);
         if (fourButton.isChecked())
             return AccountBase.Type.four;
         if (propButton.isChecked())
             return AccountBase.Type.prop;
-        return AccountBase.Type.admin;
+        throw new IllegalArgumentException("No type selected");
     }
 }
